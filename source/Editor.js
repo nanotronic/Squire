@@ -2,7 +2,7 @@
 
 var instances = [];
 
-function Squire ( doc ) {
+function Squire ( doc, disabled ) {
     var win = doc.defaultView;
     var body = doc.body;
     var mutation;
@@ -94,7 +94,10 @@ function Squire ( doc ) {
         };
     }
 
-    body.setAttribute( 'contenteditable', 'true' );
+    if(!disabled){
+        this.enable();
+    }
+    
     this.setHTML( '' );
 
     // Remove Firefox's built-in controls
@@ -165,6 +168,16 @@ proto.fireEvent = function ( type, event ) {
     }
     return this;
 };
+
+proto.enable = function() {
+    this._body.setAttribute( 'contenteditable', 'true' );
+    this.focus();
+}
+
+proto.disable = function() {
+    this._body.setAttribute( 'contenteditable', 'false' );
+    this.blur();
+}
 
 proto.destroy = function () {
     var win = this._win,
